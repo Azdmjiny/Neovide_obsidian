@@ -1,0 +1,19 @@
+{
+  "name": "obsidian-neovide-cursor-trail",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Neovide-style cursor trail for Obsidian Markdown editors",
+  "main": "main.js",
+  "scripts": {
+    "build": "tsc --noEmit && node esbuild.config.mjs",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "@codemirror/view": "^6.38.0",
+    "@types/node": "^22.15.17",
+    "esbuild": "^0.25.5",
+    "obsidian": "^1.8.7",
+    "typescript": "^5.8.3"
+  },
+  "license": "MIT"
+}

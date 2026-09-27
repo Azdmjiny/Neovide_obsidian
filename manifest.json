@@ -1,0 +1,9 @@
+{
+  "id": "neovide-cursor-trail",
+  "name": "Neovide Cursor Trail",
+  "version": "0.1.0",
+  "minAppVersion": "1.0.0",
+  "description": "Adds a smooth Neovide-style cursor trail to Markdown editors.",
+  "author": "Azdmjiny",
+  "isDesktopOnly": true
+}
