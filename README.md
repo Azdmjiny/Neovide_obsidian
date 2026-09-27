@@ -1,41 +1,45 @@
-# Neovide Cursor Trail for Obsidian
+# Neovide Cursor Trail
 
-把 [Neovide-Cursor](https://github.com/30d98f9b2/Neovide-Cursor) 的四角弹簧光标拖尾移植到 Obsidian 桌面版 Markdown 编辑器。支持源码模式和实时预览模式；每个编辑器面板独立运行，切换文件或面板时不会跨面板飞行。
+A smooth, four-corner spring cursor trail for Obsidian's desktop Markdown editor, adapted from [Neovide-Cursor](https://github.com/30d98f9b2/Neovide-Cursor). It works in both Source mode and Live Preview. Each editor pane animates independently, so the trail does not fly between files or panes.
 
-## 安装
+## Installation
 
-上架后，在 Obsidian 桌面版的“设置 → 第三方插件 → 浏览”中搜索 **Neovide Cursor Trail** 并安装。
+Once the plugin is listed in the community directory, open **Settings → Community plugins → Browse** in Obsidian, search for **Neovide Cursor Trail**, and install it.
 
-上架前可手动安装：从 GitHub Release 下载 `main.js`、`manifest.json`、`styles.css`，放入笔记库的 `.obsidian/plugins/neovide-cursor-trail/`，然后在“设置 → 第三方插件”中启用本插件。
+Until then, you can install it manually:
 
-插件目录至少需要 `manifest.json`、`main.js` 和 `styles.css`。不需要 VS Code 或 Custom CSS and JS Loader。
+1. Download `main.js`, `manifest.json`, and `styles.css` from the [latest GitHub release](https://github.com/Azdmjiny/Neovide_obsidian/releases/latest).
+2. Put the three files in `<your vault>/.obsidian/plugins/neovide-cursor-trail/`.
+3. Enable **Neovide Cursor Trail** under **Settings → Community plugins**.
 
-## 设置
+The plugin does not require VS Code or Custom CSS and JS Loader.
 
-在插件设置页可调整启用状态、动画时长、拖尾强度、透明度、辉光以及颜色。颜色默认跟随当前主题的编辑器光标；也可以输入自定义的六位十六进制颜色。系统开启“减少动态效果”时会自动暂停动画。
+## Settings
 
-## 适用范围
+You can adjust the animation duration, trail strength, opacity, glow, and color, or turn the effect off. By default, the trail follows the current theme's editor cursor color. You can also enter a custom six-digit hex color. The animation pauses when your system's **Reduce motion** setting is enabled.
 
-- 仅 Obsidian 桌面端 Markdown 编辑器，包括源码模式与实时预览模式。
-- 一次只绘制当前编辑器的主光标；选择文本、多光标、输入法组合输入、滚动、失焦时保留原生光标。
-- Canvas、搜索框、属性输入框、阅读模式及移动端不绘制拖尾。
+## Scope
 
-## 从源码构建
+- Works only in the desktop Markdown editor, in Source mode and Live Preview.
+- Animates the primary cursor only. The native cursor remains visible while selecting text, using multiple cursors, composing text with an input method, scrolling, or moving focus away from the editor.
+- Does not animate cursors in Canvas, search fields, property fields, Reading view, or Obsidian mobile.
 
-需要 Node.js 18 或更新版本：
+## Build from source
+
+Use Node.js 22 or newer to build and run the tests:
 
 ```sh
-npm install
+npm ci
 npm run build
 npm test
 ```
 
-构建产物为根目录的 `main.js`，安装时连同 `manifest.json`、`styles.css` 一起复制到插件目录。
+The build writes `main.js` to the repository root. Install it together with `manifest.json` and `styles.css`.
 
-## 发布
+## Release process
 
-发布前确保 `package.json`、`manifest.json` 和 `versions.json` 的版本号一致。将源码推送到公开 GitHub 仓库后，推送与清单版本完全相同的标签（例如 `0.1.0`，不带 `v` 前缀）。GitHub Actions 会构建、测试并创建带有三个插件文件的草稿 Release。填写发布说明并公开发布后，在 [Obsidian 社区目录](https://community.obsidian.md/plugins) 登录、关联 GitHub 账号并提交仓库地址。插件审核通过后才会出现在应用内搜索结果中。
+Keep the versions in `package.json`, `manifest.json`, and `versions.json` in sync. Push a tag that exactly matches the version in `manifest.json` (for example, `0.1.0`, without a `v` prefix). GitHub Actions builds and tests the plugin, then creates a draft release containing the three installable files. Add release notes and publish the release. For the first community directory submission, sign in at [Obsidian Community](https://community.obsidian.md), connect your GitHub account, and submit this repository. The plugin becomes searchable in Obsidian after the directory accepts it.
 
-## 致谢与许可
+## Credits and license
 
-四角弹簧模型和运动参数改编自 [30d98f9b2/Neovide-Cursor](https://github.com/30d98f9b2/Neovide-Cursor)，原作者 [LengineerC](https://github.com/LengineerC)。本插件由 Azdmjiny 维护，基于 MIT 许可证发布；原项目的版权声明保留在 `LICENSE` 中。Obsidian 接入、配置和生命周期管理为本移植版本新增。
+The four-corner spring model and motion parameters are adapted from [30d98f9b2/Neovide-Cursor](https://github.com/30d98f9b2/Neovide-Cursor) by [LengineerC](https://github.com/LengineerC). Azdmjiny maintains this plugin and added its Obsidian integration, settings, and lifecycle management. The plugin is licensed under MIT; the original copyright notice is preserved in [LICENSE](LICENSE).
