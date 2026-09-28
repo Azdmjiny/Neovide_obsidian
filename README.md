@@ -2,6 +2,10 @@
 
 A smooth, four-corner spring cursor trail for Obsidian's desktop Markdown editor, adapted from [Neovide-Cursor](https://github.com/30d98f9b2/Neovide-Cursor). It works in both Source mode and Live Preview. Each editor pane animates independently, so the trail does not fly between files or panes.
 
+## Demo
+
+![Neovide Cursor Trail animating as the cursor moves through a Markdown note](assets/cursor-trail.gif)
+
 ## Installation
 
 Once the plugin is listed in the community directory, open **Settings → Community plugins → Browse** in Obsidian, search for **Neovide Cursor Trail**, and install it.

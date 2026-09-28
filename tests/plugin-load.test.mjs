@@ -59,6 +59,18 @@ test('source and live preview editors animate independently and clean up on disa
     addEventListener(_event, listener) { mediaListeners.add(listener); },
     removeEventListener(_event, listener) { mediaListeners.delete(listener); },
   };
+  const editorWindow = {
+    devicePixelRatio: 1,
+    requestAnimationFrame(callback) { const id = nextFrameId++; frames.set(id, callback); return id; },
+    cancelAnimationFrame(id) { frames.delete(id); },
+    getComputedStyle(element) {
+      return {
+        borderLeftWidth: element?.native ? '2px' : '0px',
+        borderLeftColor: 'rgb(255, 192, 203)',
+        getPropertyValue: () => '#ffc0cb',
+      };
+    },
+  };
   class Plugin {
     app = {};
     cleanups = [];
@@ -77,18 +89,8 @@ test('source and live preview editors animate independently and clean up on disa
       if (name === '@codemirror/view') return { ViewPlugin: { fromClass: (klass) => klass } };
       throw new Error(`Unexpected dependency: ${name}`);
     },
-    window: { matchMedia: () => media, devicePixelRatio: 1 },
-    document: { createElement: () => makeCanvas() },
+    window: { matchMedia: () => media },
     ResizeObserver: class { observe() {} disconnect() {} },
-    requestAnimationFrame(callback) { const id = nextFrameId++; frames.set(id, callback); return id; },
-    cancelAnimationFrame(id) { frames.delete(id); },
-    getComputedStyle(element) {
-      return {
-        borderLeftWidth: element?.native ? '2px' : '0px',
-        borderLeftColor: 'rgb(255, 192, 203)',
-        getPropertyValue: () => '#ffc0cb',
-      };
-    },
   });
 
   function makeCanvas() {
@@ -108,10 +110,16 @@ test('source and live preview editors animate independently and clean up on disa
     const classes = new Set();
     const children = [];
     const dom = {
-      mode, children,
+      mode, children, win: editorWindow,
       classList: { add: (name) => classes.add(name), remove: (name) => classes.delete(name), contains: (name) => classes.has(name) },
       closest: () => (mode === 'source' || mode === 'live-preview' ? {} : null),
-      appendChild: (child) => children.push(child),
+      createEl(tag, options) {
+        assert.equal(tag, 'canvas');
+        const canvas = makeCanvas();
+        canvas.className = options.cls;
+        children.push(canvas);
+        return canvas;
+      },
       addEventListener() {}, removeEventListener() {},
       querySelector: () => ({ native: true }),
     };

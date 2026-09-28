@@ -112,15 +112,18 @@ class CursorTrailView {
 
   private mount(): void {
     if (this.canvas || !this.view.dom.closest('.markdown-source-view.mod-cm6')) return;
-    const canvas = document.createElement('canvas');
-    canvas.className = 'neovide-cursor-trail';
-    canvas.setAttribute('aria-hidden', 'true');
+    const canvas = this.view.dom.createEl('canvas', {
+      cls: 'neovide-cursor-trail',
+      attr: { 'aria-hidden': 'true' },
+    });
     const context = canvas.getContext('2d');
-    if (!context) return;
+    if (!context) {
+      canvas.remove();
+      return;
+    }
     this.canvas = canvas;
     this.context = context;
     this.view.dom.classList.add('neovide-cursor-editor');
-    this.view.dom.appendChild(canvas);
     this.resizeObserver = new ResizeObserver(() => {
       this.resizeCanvas();
       this.stop();
@@ -133,7 +136,7 @@ class CursorTrailView {
   private resizeCanvas(): void {
     if (!this.canvas || !this.context) return;
     const rect = this.canvas.getBoundingClientRect();
-    const ratio = window.devicePixelRatio || 1;
+    const ratio = this.view.dom.win.devicePixelRatio || 1;
     this.canvasWidth = rect.width;
     this.canvasHeight = rect.height;
     const width = Math.max(1, Math.round(rect.width * ratio));
@@ -147,7 +150,7 @@ class CursorTrailView {
 
   private schedule(): void {
     if (!this.destroyed && this.frameId === 0) {
-      this.frameId = requestAnimationFrame(this.frame);
+      this.frameId = this.view.dom.win.requestAnimationFrame(this.frame);
     }
   }
 
@@ -193,7 +196,7 @@ class CursorTrailView {
     const y = coordinates.top - canvasRect.top;
     if (x < 0 || y < 0 || x > canvasRect.width || y + coordinates.bottom - coordinates.top > canvasRect.height) return null;
     const nativeCursor = this.view.dom.querySelector<HTMLElement>('.cm-cursorLayer .cm-cursor-primary, .cm-cursorLayer .cm-cursor');
-    const nativeWidth = nativeCursor ? Number.parseFloat(getComputedStyle(nativeCursor).borderLeftWidth) : 0;
+    const nativeWidth = nativeCursor ? Number.parseFloat(this.view.dom.win.getComputedStyle(nativeCursor).borderLeftWidth) : 0;
     return {
       x,
       y,
@@ -230,9 +233,9 @@ class CursorTrailView {
     const settings = this.controller.settings;
     if (settings.colorMode === 'custom') return settings.customColor;
     const cursor = this.view.dom.querySelector<HTMLElement>('.cm-cursorLayer .cm-cursor-primary, .cm-cursorLayer .cm-cursor');
-    const color = cursor ? getComputedStyle(cursor).borderLeftColor : '';
+    const color = cursor ? this.view.dom.win.getComputedStyle(cursor).borderLeftColor : '';
     if (color && color !== 'transparent' && color !== 'rgba(0, 0, 0, 0)') return color;
-    return getComputedStyle(this.view.dom).getPropertyValue('--text-accent').trim() || settings.customColor;
+    return this.view.dom.win.getComputedStyle(this.view.dom).getPropertyValue('--text-accent').trim() || settings.customColor;
   }
 
   private readCursorHeight(): number {
@@ -246,7 +249,7 @@ class CursorTrailView {
   }
 
   private stop(): void {
-    if (this.frameId !== 0) cancelAnimationFrame(this.frameId);
+    if (this.frameId !== 0) this.view.dom.win.cancelAnimationFrame(this.frameId);
     this.frameId = 0;
     this.needsSnap = true;
     this.clear();

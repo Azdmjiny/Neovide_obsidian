@@ -11,6 +11,6 @@
   z-index: 10;
 }
 
-.neovide-cursor-animating .cm-cursorLayer .cm-cursor {
-  opacity: 0 !important;
+.markdown-source-view.mod-cm6 .cm-editor.neovide-cursor-editor.neovide-cursor-animating .cm-cursorLayer .cm-cursor {
+  opacity: 0;
 }

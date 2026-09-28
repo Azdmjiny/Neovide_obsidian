@@ -1,6 +1,6 @@
 {
   "name": "obsidian-neovide-cursor-trail",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Neovide-style cursor trail for Obsidian Markdown editors",
   "main": "main.js",
